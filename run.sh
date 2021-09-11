@@ -46,6 +46,11 @@ while (( "$#" )); do
             DOCKER_ARGS="$DOCKER_ARGS -p 5557:5557 -p 5558:5558"
             shift
             ;;
+        --is-aws-client)
+            IS_CLIENT=1
+            ARGS="$ARGS $1"
+            shift
+            ;;    
         --is-client)
             IS_CLIENT=1
             ARGS="$ARGS $1"

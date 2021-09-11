@@ -19,6 +19,7 @@ parser.add_argument("--avatars", default="./avatars", help="path to avatars dire
 
 parser.add_argument("--is-worker", action="store_true", help="Whether to run this process as a remote GPU worker")
 parser.add_argument("--is-client", action="store_true", help="Whether to run this process as a client")
+parser.add_argument("--is-aws-client", action="store_true", help="Whether to run this process as an AWS remote client")
 parser.add_argument("--in-port", type=int, default=5557, help="Remote worker input port")
 parser.add_argument("--out-port", type=int, default=5558, help="Remote worker output port")
 parser.add_argument("--in-addr", type=str, default=None, help="Socket address for incoming messages, like example.com:5557")
@@ -31,5 +32,5 @@ parser.set_defaults(no_pad=False)
 
 opt = parser.parse_args()
 
-if opt.is_client and (opt.in_addr is None or opt.out_addr is None):
+if opt.is_client and (opt.in_addr is None or opt.out_addr is None) and not opt.is_aws_client:
     raise ValueError("You have to set --in-addr and --out-addr")

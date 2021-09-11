@@ -1,5 +1,3 @@
-# how many cameras to query at the first start
-query_n_cams: 4
-
-# camera configuration path
 cam_config: ./cam.yaml
+public_dns: ec2-54-246-48-183.eu-west-1.compute.amazonaws.com
+query_n_cams: 4

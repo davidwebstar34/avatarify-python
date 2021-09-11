@@ -13,6 +13,7 @@ from afy.arguments import opt
 from afy.utils import info, Once, Tee, crop, pad_img, resize, TicToc
 import afy.camera_selector as cam_selector
 
+from afy.aws import start_remote
 
 log = Tee('./var/log/cam_fomm.log')
 
@@ -20,7 +21,7 @@ log = Tee('./var/log/cam_fomm.log')
 LANDMARK_SLICE_ARRAY = np.array([17, 22, 27, 31, 36, 42, 48, 60])
 
 if _platform == 'darwin':
-    if not opt.is_client:
+    if not opt.is_client and not opt.is_aws_client:
         info('\nOnly remote GPU mode is supported for Mac (use --is-client and --connect options to connect to the server)')
         info('Standalone version will be available lately!\n')
         exit()
@@ -208,6 +209,33 @@ if __name__ == "__main__":
                 in_addr=opt.in_addr, out_addr=opt.out_addr,
                 **predictor_args
             )
+        except ConnectionError as err:
+            log(err)
+            sys.exit(1)
+        predictor.start()
+    elif opt.is_aws_client:
+        from afy import predictor_remote
+        try:
+            if config['public_dns'] is None:
+                d = start_remote()
+
+                with open('config.yaml', 'w') as f:
+                    config['public_dns'] = d['public_dns']
+                    # config['instance_id'] = d['instance_id']
+                    yaml.dump(config, f)
+                
+                predictor = predictor_remote.PredictorRemote(
+                    in_addr=d['in_addr'], out_addr=d['out_addr'],
+                    **predictor_args
+                )
+            else:
+                in_addr = "tcp://" + config['public_dns'] + ":5557"
+                out_addr = "tcp://" + config['public_dns'] + ":5558"
+
+                predictor = predictor_remote.PredictorRemote(
+                    in_addr=in_addr, out_addr=out_addr,
+                    **predictor_args
+                )
         except ConnectionError as err:
             log(err)
             sys.exit(1)
