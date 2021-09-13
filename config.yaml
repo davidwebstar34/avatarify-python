@@ -1,3 +1,3 @@
 cam_config: ./cam.yaml
-public_dns: ec2-54-246-48-183.eu-west-1.compute.amazonaws.com
+public_dns: null
 query_n_cams: 4
