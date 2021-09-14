@@ -13,7 +13,7 @@ from afy.arguments import opt
 from afy.utils import info, Once, Tee, crop, pad_img, resize, TicToc
 import afy.camera_selector as cam_selector
 
-from afy.aws import start_remote
+from afy.aws import start_remote, terminate_remote
 
 log = Tee('./var/log/cam_fomm.log')
 
@@ -221,7 +221,6 @@ if __name__ == "__main__":
 
                 with open('config.yaml', 'w') as f:
                     config['public_dns'] = d['public_dns']
-                    # config['instance_id'] = d['instance_id']
                     yaml.dump(config, f)
                 
                 predictor = predictor_remote.PredictorRemote(
@@ -358,6 +357,10 @@ if __name__ == "__main__":
                 break
 
             if key == 27: # ESC
+                with open('config.yaml', 'w') as f:
+                    terminate_remote(config['instance_id'])
+                    # config['public_dns'] = 'null'
+                    yaml.dump(config, f)
                 break
             elif key == ord('d'):
                 cur_ava += 1
