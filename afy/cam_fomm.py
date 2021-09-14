@@ -185,6 +185,8 @@ if __name__ == "__main__":
     with open('config.yaml', 'r') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
 
+    aws_response = None       
+
     global display_string
     display_string = ""
 
@@ -217,14 +219,14 @@ if __name__ == "__main__":
         from afy import predictor_remote
         try:
             if config['public_dns'] is None:
-                d = start_remote()
+                aws_response = start_remote()
 
                 with open('config.yaml', 'w') as f:
-                    config['public_dns'] = d['public_dns']
+                    config['public_dns'] = aws_response['public_dns']
                     yaml.dump(config, f)
                 
                 predictor = predictor_remote.PredictorRemote(
-                    in_addr=d['in_addr'], out_addr=d['out_addr'],
+                    in_addr=aws_response['in_addr'], out_addr=aws_response['out_addr'],
                     **predictor_args
                 )
             else:
@@ -358,8 +360,8 @@ if __name__ == "__main__":
 
             if key == 27: # ESC
                 with open('config.yaml', 'w') as f:
-                    terminate_remote(config['instance_id'])
-                    # config['public_dns'] = 'null'
+                    terminate_remote(aws_response['instance_id'])
+                    config['public_dns'] = None
                     yaml.dump(config, f)
                 break
             elif key == ord('d'):

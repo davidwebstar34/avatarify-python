@@ -1,7 +1,7 @@
 cam_config: ./cam.yaml
-public_dns: null
-query_n_cams: 4
 image_id: ami-0d42ecea54593b8de
 instance_type: g4dn.xlarge
-subnet_id: subnet-0b9d05d227fc94298
+public_dns: null
+query_n_cams: 4
 security_group: sg-0461794c3fc706e1d
+subnet_id: subnet-0b9d05d227fc94298
