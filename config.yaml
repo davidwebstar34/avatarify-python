@@ -1,5 +1,5 @@
 cam_config: ./cam.yaml
-image_id: ami-0d42ecea54593b8de
+image_id: ami-0e107038aabc2a48c
 instance_type: g4dn.xlarge
 public_dns: null
 query_n_cams: 4

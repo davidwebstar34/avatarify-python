@@ -141,7 +141,7 @@ else
         xhost -local:root
 
     else
-        docker run $DOCKER_ARGS -it --rm --privileged  \
+        docker run $DOCKER_ARGS --rm --privileged  \
             -v $PWD:/root/.torch/models \
             -v $PWD/avatars:/app/avatarify/avatars \
             avatarify python3 afy/cam_fomm.py \
